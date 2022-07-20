@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vmo.p2c.p2ctool.HelloController">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+                <MenuItem mnemonicParsing="false" text="Open Folder" />
+                <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <SplitPane prefHeight="20.0" prefWidth="200.0">
+        <items>
+          <AnchorPane minHeight="40.0" minWidth="500.0" prefHeight="40.0" prefWidth="500.0">
+               <SplitPane dividerPositions="0.5, 0.5, 0.5" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <items>
+                     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minWidth="90.0" prefHeight="20.0" prefWidth="90.0">
+                        <children>
+                           <Button id="btnLoadFolder" fx:id="btnLoadFolder" mnemonicParsing="false" onAction="#btnLoadFolder_onActionClick" text="Open Folder" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        </children>
+                     </AnchorPane>
+                     <AnchorPane layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="120.0" prefHeight="20.0" prefWidth="120.0">
+                        <children>
+                           <Button fx:id="btnScanningFolder" mnemonicParsing="false" onAction="#btnScanningFolder_onActionClick" text="Scanning Folder" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        </children>
+                     </AnchorPane>
+                     <AnchorPane layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="120.0" prefHeight="20.0" prefWidth="120.0">
+                          <children>
+                              <Button fx:id="btnExportResult" mnemonicParsing="false" onAction="#btnExportResult_onActionClick" text="Export Result" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                          </children>
+                     </AnchorPane>
+                     <AnchorPane layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="120.0" prefHeight="20.0" prefWidth="120.0">
+                          <children>
+                              <Button fx:id="btnControlFlowCobol" mnemonicParsing="false" onAction="#btnControlFlowCobol_onActionClick" text="Control Flow Cobol" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                          </children>
+                     </AnchorPane>
+                     <AnchorPane layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="20.0">
+                        <children>
+                             <TextField fx:id="txtFolderPath" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="25.6" text="C:\Oracle\Middleware11.1.1.9\utils\quickstart\images" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        </children>
+                     </AnchorPane>
+                  </items>
+               </SplitPane>
+          </AnchorPane>
+        </items>
+      </SplitPane>
+      <TableView fx:id="tvFileStructure" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" VBox.vgrow="ALWAYS">
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+         <items>
+            <Label fx:id="lbSummary" text="Summary:" />
+         </items></ToolBar>
+   </children>
+</VBox>
