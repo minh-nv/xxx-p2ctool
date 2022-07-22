@@ -18,7 +18,7 @@
       <SplitPane prefHeight="20.0" prefWidth="200.0">
         <items>
           <AnchorPane minHeight="40.0" minWidth="500.0" prefHeight="40.0" prefWidth="500.0">
-               <SplitPane dividerPositions="0.5, 0.5, 0.5" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <SplitPane dividerPositions="0.5, 0.5, 0.5, 0.5" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <items>
                      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minWidth="90.0" prefHeight="20.0" prefWidth="90.0">
                         <children>
@@ -42,7 +42,7 @@
                      </AnchorPane>
                      <AnchorPane layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="20.0">
                         <children>
-                             <TextField fx:id="txtFolderPath" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="25.6" text="C:\Oracle\Middleware11.1.1.9\utils\quickstart\images" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                             <TextField fx:id="txtFolderPath" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="25.6" text="D:\Developer\Vmo-HKTelecom\SourceCode\COBOL-SRC" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                         </children>
                      </AnchorPane>
                   </items>

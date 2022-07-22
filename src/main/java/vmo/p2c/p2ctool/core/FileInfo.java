@@ -15,13 +15,14 @@ public class FileInfo {
     public static final int  idx_Cobol= 6;
     public static final int idx_Jcl= 7;
     public static final int idx_Rexx= 8;
-    public static final int idx_Msos= 9;
-    public static final int idx_Lnas= 10;
-    public static final int idx_Cpas= 11;
-    public static final int idx_Stars= 12;
-    public static final int idx_Buc= 13;
-    public static final int idx_Fes= 14;
-    public static final int idx_ActionOpenFile= 15;
+    public static final int idx_Clist= 9;
+    public static final int idx_Msos= 10;
+    public static final int idx_Lnas= 11;
+    public static final int idx_Cpas= 12;
+    public static final int idx_Stars= 13;
+    public static final int idx_Buc= 14;
+    public static final int idx_Fes= 15;
+    public static final int idx_ActionOpenFile= 16;
 
     private Boolean isFile;
     private File originalFile;
@@ -36,6 +37,8 @@ public class FileInfo {
     private BooleanProperty jcl;
     private BooleanProperty rexx;
 
+    private BooleanProperty clist;
+
     private BooleanProperty msos;
     private BooleanProperty lnas;
     private BooleanProperty cpas;
@@ -46,10 +49,10 @@ public class FileInfo {
 
     public FileInfo(File originalFile, Long seq, Image icon, String file, String path,
                      String size, String lastMofified, String lineOfCode,
-                     Boolean cobol, Boolean jcl, Boolean rexx,
+                     Boolean cobol, Boolean jcl, Boolean rexx, Boolean clist,
                      Boolean msos, Boolean lnas, Boolean cpas,
                      Boolean stars, Boolean buc, Boolean fes,
-                     String metadata) {
+                    String metadata) {
         if(originalFile.exists() && originalFile.isFile() )
             this.isFile= true;
         else
@@ -67,7 +70,8 @@ public class FileInfo {
 
         this.cobol = new SimpleBooleanProperty(cobol);
         this.jcl = new SimpleBooleanProperty(jcl);
-        this.rexx = new SimpleBooleanProperty(rexx);
+        this.setRexx(new SimpleBooleanProperty(rexx));
+        this.clist = new SimpleBooleanProperty(clist);
 
         this.msos = new SimpleBooleanProperty(msos);
         this.lnas = new SimpleBooleanProperty(lnas);
@@ -229,5 +233,13 @@ public class FileInfo {
 
     public void setIsFile(Boolean isFile) {
         this.isFile = isFile;
+    }
+
+    public BooleanProperty getClist() {
+        return clist;
+    }
+
+    public void setClist(BooleanProperty clist) {
+        this.clist = clist;
     }
 }

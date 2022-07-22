@@ -16,8 +16,8 @@ import java.util.stream.Stream;
 
 public class DetectControlFlow {
     String rootPath;
-    Map<String, Integer> fileCallMap = new HashMap<>();
-    HashMap<String, Set<String>> flowNodeMap = new HashMap<>();
+    private Map<String, Integer> fileCallMap = new HashMap<>();
+    private HashMap<String, Set<String>> flowNodeMap = new HashMap<>();
 
     public DetectControlFlow(String rootPath) {
         this.rootPath= rootPath;
@@ -120,5 +120,21 @@ public class DetectControlFlow {
 
     public boolean lineIsNotComment(String line) {
         return line.charAt(6) != '*';
+    }
+
+    public Map<String, Integer> getFileCallMap() {
+        return fileCallMap;
+    }
+
+    public void setFileCallMap(Map<String, Integer> fileCallMap) {
+        this.fileCallMap = fileCallMap;
+    }
+
+    public HashMap<String, Set<String>> getFlowNodeMap() {
+        return flowNodeMap;
+    }
+
+    public void setFlowNodeMap(HashMap<String, Set<String>> flowNodeMap) {
+        this.flowNodeMap = flowNodeMap;
     }
 }

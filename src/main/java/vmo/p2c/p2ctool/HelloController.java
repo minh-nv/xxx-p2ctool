@@ -1,5 +1,11 @@
 package vmo.p2c.p2ctool;
 
+import com.brunomnsilva.smartgraph.graph.Digraph;
+import com.brunomnsilva.smartgraph.graph.DigraphEdgeList;
+import com.brunomnsilva.smartgraph.graphview.SmartCircularSortedPlacementStrategy;
+import com.brunomnsilva.smartgraph.graphview.SmartGraphPanel;
+import com.brunomnsilva.smartgraph.graphview.SmartPlacementStrategy;
+import com.dlsc.formsfx.model.event.FormEvent;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.beans.property.*;
@@ -21,7 +27,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import vmo.p2c.p2ctool.core.DetectControlFlow;
 import vmo.p2c.p2ctool.core.DetectFileType;
 import vmo.p2c.p2ctool.core.FileInfo;
 
@@ -29,10 +37,14 @@ import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
 import java.util.stream.Stream;
+import com.brunomnsilva.smartgraph.graph.Graph;
+import com.brunomnsilva.smartgraph.graph.GraphEdgeList;
+
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 public class HelloController {
     private final String PathToResources= "D:\\Developer\\Vmo-HKTelecom\\Tools\\P2CTool\\P2CTool\\src\\main\\resources";
@@ -49,17 +61,53 @@ public class HelloController {
 
     @FXML
     protected void btnControlFlowCobol_onActionClick() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("control-flow-cobol.fxml"));
-        Parent root1 = (Parent) fxmlLoader.load();
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("control-flow-cobol.fxml"));
+//        Parent root1 = (Parent) fxmlLoader.load();
+//        ControlFlowCobolController controller = fxmlLoader.getController();
+//        controller.initData(txtFolderPath.getText());
+//
+//        Stage stage = new Stage();
+//        stage.setTitle("P2C Tool - Control Flow Cobol");
+//
+//        stage.setScene(new Scene(root1, 920, 740));
+//        stage.show();
 
-        ControlFlowCobolController controller = fxmlLoader.getController();
-        controller.initData(txtFolderPath.getText());
+        Graph<String, String> g = new GraphEdgeList<>();
+        DetectControlFlow detectControlFlow= new DetectControlFlow(txtFolderPath.getText());
+        detectControlFlow.buildFlowUsingFileWalkAndVisitor();
+        detectControlFlow.showResult();
 
-        Stage stage = new Stage();
-        stage.setTitle("P2C Tool - Control Flow Cobol");
+        //buildChart
+        SmartPlacementStrategy strategy = new SmartCircularSortedPlacementStrategy();
+        for (Map.Entry<String, Set<String>> flowNodeEntry : detectControlFlow.getFlowNodeMap().entrySet()) {
+            if (!detectControlFlow.getFileCallMap().get(flowNodeEntry.getKey()).equals(0)) {
+                if (!flowNodeEntry.getValue().isEmpty()) {
+                    g.insertVertex(flowNodeEntry.getKey());
+                    g.insertVertex(flowNodeEntry.getValue().toString());
+                    g.insertEdge(flowNodeEntry.getKey(), flowNodeEntry.getValue().toString(), flowNodeEntry.getKey());
 
-        stage.setScene(new Scene(root1, 920, 740));
+                    System.out.printf("%s -> %s\n", flowNodeEntry.getKey(), flowNodeEntry.getValue());
+                }
+            }
+        }
+
+        SmartGraphPanel<String, String> graphView = new SmartGraphPanel<>(g, strategy);
+
+        for (Map.Entry<String, Set<String>> flowNodeEntry : detectControlFlow.getFlowNodeMap().entrySet()) {
+            if (!detectControlFlow.getFileCallMap().get(flowNodeEntry.getKey()).equals(0)) {
+                if (!flowNodeEntry.getValue().isEmpty()) {
+                    graphView.getStylableVertex(flowNodeEntry.getKey()).setStyleClass("myVertex");
+                }
+            }
+        }
+
+        Scene scene = new Scene(graphView, 1024, 768);
+        Stage stage = new Stage(StageStyle.DECORATED);
+        stage.setTitle("JavaFXGraph Visualization");
+        stage.setScene(scene);
         stage.show();
+
+        graphView.init();
     }
 
     @FXML
@@ -129,19 +177,14 @@ public class HelloController {
                                         totalSpace + f.getAbsolutePath().substring(rootPath.length() + 1),
                                        "",
                                         "", "lastMofified", "",
-                                       false, false,false,
+                                       false, false,false, false,
                                         false, false,false,
                                         false, false,false,
                                         "metadata");
 
-                f1.setLineOfCode(new SimpleStringProperty(""));
-                f1.setRexx(new SimpleBooleanProperty(false));
-                f1.setCobol(new SimpleBooleanProperty(false));
-                f1.setJcl(new SimpleBooleanProperty(false));
-
                 csvData.add(f1);
 
-                System.out.println( "Dir: " + f.getAbsolutePath().substring(rootPath.length() + 1));
+                //System.out.println( "Dir: " + f.getAbsolutePath().substring(rootPath.length() + 1));
                 WalkFolder(level, csvData, rootPath, f.getAbsolutePath());
             }
             else {
@@ -155,7 +198,7 @@ public class HelloController {
                         String.format("%,d b", f.length()),
                         "lastMofified",
                         "",
-                        false, false,false,
+                        false, false,false, false,
                         false, false,false,
                         false, false,false,
                         "metadata");
@@ -167,6 +210,10 @@ public class HelloController {
                 (new DetectFileType()).DetectProgram_Msos(f, f1);
                 (new DetectFileType()).DetectProgram_Lnas(f, f1);
                 (new DetectFileType()).DetectProgram_Cpas(f, f1);
+
+                (new DetectFileType()).DetectFile_Clist(f, f1);
+                if(!f1.getClist().getValue())
+                    (new DetectFileType()).DetectFile_Rexx(f, f1);
 
                 csvData.add(f1);
 
@@ -223,7 +270,7 @@ public class HelloController {
         for (int ii = 0; ii < columns.size(); ii++) {
             int finalIdx = ii;
 
-            if(finalIdx== FileInfo.idx_Seq )
+            if(finalIdx== FileInfo.idx_Seq)
             {
                 TableColumn<FileInfo, String> column = new TableColumn<>(columns.get(ii));
 
@@ -281,6 +328,14 @@ public class HelloController {
                 TableColumn<FileInfo, Boolean> column = new TableColumn<>(columns.get(ii));
 
                 column.setCellValueFactory(cd -> cd.getValue().getRexx());
+                column.setCellFactory(CheckBoxTableCell.forTableColumn(column));
+                tvFileStructure.getColumns().add(column);
+            }
+
+            if(finalIdx== FileInfo.idx_Clist) {
+                TableColumn<FileInfo, Boolean> column = new TableColumn<>(columns.get(ii));
+
+                column.setCellValueFactory(cd -> cd.getValue().getClist());
                 column.setCellFactory(CheckBoxTableCell.forTableColumn(column));
                 tvFileStructure.getColumns().add(column);
             }
@@ -381,7 +436,7 @@ public class HelloController {
 
         WalkFolder(0, csvData, folderPath, folderPath);
 
-        String headers[] = new String[15];
+        String headers[] = new String[16];
         headers[FileInfo.idx_Seq]= "Seq";
         headers[FileInfo.idx_File]= "File";
         headers[FileInfo.idx_Path]= "Path";
@@ -390,6 +445,7 @@ public class HelloController {
         headers[FileInfo.idx_Cobol]= "Cobol";
         headers[FileInfo.idx_Jcl]= "Jcl";
         headers[FileInfo.idx_Rexx]= "Rexx";
+        headers[FileInfo.idx_Clist]= "Clist";
         headers[FileInfo.idx_Msos]= "Msos";
         headers[FileInfo.idx_Lnas]= "Lnas";
         headers[FileInfo.idx_Cpas]= "Cpas";
@@ -471,6 +527,10 @@ public class HelloController {
         tvFileStructure.getColumns().get(FileInfo.idx_Rexx).setPrefWidth(40);
         tvFileStructure.getColumns().get(FileInfo.idx_Rexx).setMinWidth(40);
         tvFileStructure.getColumns().get(FileInfo.idx_Rexx).setMaxWidth(40);
+
+        tvFileStructure.getColumns().get(FileInfo.idx_Clist).setPrefWidth(40);
+        tvFileStructure.getColumns().get(FileInfo.idx_Clist).setMinWidth(40);
+        tvFileStructure.getColumns().get(FileInfo.idx_Clist).setMaxWidth(40);
 
         tvFileStructure.getColumns().get(FileInfo.idx_Msos).setPrefWidth(40);
         tvFileStructure.getColumns().get(FileInfo.idx_Msos).setMinWidth(40);

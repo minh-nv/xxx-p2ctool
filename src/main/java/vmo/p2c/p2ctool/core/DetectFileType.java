@@ -50,4 +50,27 @@ public class DetectFileType {
             f1.setFes(new SimpleBooleanProperty(true));
         }
     }
+
+    public boolean DetectFile_Clist(File f, FileInfo f1) {
+        if(f.getName().contains("&DATATYPE") || f.getName().contains("&EVAL") || f.getName().contains("&LENGTH") ||
+           f.getName().contains("&NSTR") || f.getName().contains("&STR") || f.getName().contains("&SUBSTR") )
+        {
+            f1.setClist(new SimpleBooleanProperty(true));
+            return true;
+        }
+
+        return  false;
+    }
+
+    public boolean DetectFile_Rexx(File f, FileInfo f1) {
+        if(f.getName().contains("DATATYPE") || f.getName().contains("EVAL") || f.getName().contains("LENGTH") ||
+                f.getName().contains("NSTR") || f.getName().contains("STR") || f.getName().contains("SUBSTR") )
+        {
+            f1.setRexx(new SimpleBooleanProperty(true));
+            return true;
+        }
+
+        return  false;
+    }
+
 }

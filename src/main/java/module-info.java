@@ -16,6 +16,9 @@ module vmo.p2c.p2ctool {
 
     requires java.datatransfer;
     requires java.desktop;
+    requires JavaFXSmartGraph;
+
+//    exports com.brunomnsilva.smartgraph.graph;
 
     opens vmo.p2c.p2ctool to javafx.fxml;
     exports vmo.p2c.p2ctool;
